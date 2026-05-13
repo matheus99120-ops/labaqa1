@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reparos — Laboratório Araraquara</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1117;--bg2:#181b24;--bg3:#1e2230;--card:#22263a;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);
+  --text:#eef0f8;--muted:#8b90a8;--accent:#7c6fff;--accent2:#a78bfa;
+  --green:#34d399;--gbg:rgba(52,211,153,0.1);
+  --yellow:#fbbf24;--ybg:rgba(251,191,36,0.1);
+  --red:#f87171;--rbg:rgba(248,113,113,0.1);
+  --blue:#60a5fa;--bbg:rgba(96,165,250,0.1);
+  --orange:#fb923c;--obg:rgba(251,146,60,0.1);
+  --purple:#c084fc;--pbg:rgba(192,132,252,0.1);
+  --r:14px;--rs:8px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+header{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 2rem;position:sticky;top:0;z-index:100;}
+.hi{max-width:1300px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px;gap:12px;}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-ico{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--purple));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.logo-t{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;}
+.logo-s{font-size:11px;color:var(--muted);}
+.hr{display:flex;align-items:center;gap:10px;}
+.hdate{font-size:12px;color:var(--muted);background:var(--bg3);padding:6px 14px;border-radius:20px;border:1px solid var(--border);}
+.sbtn{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:20px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:.15s;}
+.sbtn:hover{border-color:var(--accent);color:var(--accent2);}
+.sico{display:inline-block;font-size:14px;}.sico.spin{animation:rot 1s linear infinite;}
+@keyframes rot{to{transform:rotate(360deg);}}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;animation:pp 2.5s ease-in-out infinite;}
+.dot.load{background:var(--yellow);animation:none;}.dot.err{background:var(--red);animation:none;}
+@keyframes pp{0%,100%{opacity:1}50%{opacity:.4}}
+main{max-width:1300px;margin:0 auto;padding:2.5rem 2rem;}
+.loader{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6rem 2rem;gap:16px;color:var(--muted);}
+.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:rot .8s linear infinite;}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:16px;margin-bottom:2rem;}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.5rem;transition:.2s;}
+.sc:hover{border-color:var(--border2);transform:translateY(-2px);}
+.sl{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;}
+.sv{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;line-height:1;}
+.sd{font-size:11px;color:var(--muted);margin-top:6px;}
+.s-tot .sv{color:var(--accent2);}.s-rep .sv{color:var(--green);}.s-agp .sv{color:var(--yellow);}
+.s-sem .sv{color:var(--red);}.s-ana .sv{color:var(--blue);}.s-com .sv{color:var(--orange);}
+.lupd{font-size:11px;color:var(--muted);margin-bottom:1.5rem;}
+.fbar{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.5rem;margin-bottom:1.5rem;display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+.flbl{font-size:12px;color:var(--muted);font-weight:500;}
+.fb{background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:20px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:.15s;}
+.fb:hover{border-color:var(--accent);color:var(--text);}.fb.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+.sw{flex:1;min-width:200px;position:relative;}
+.si{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;pointer-events:none;}
+.sinp{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:7px 12px 7px 34px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:.15s;}
+.sinp::placeholder{color:var(--muted);}.sinp:focus{border-color:var(--accent);}
+.vtabs{display:flex;gap:8px;margin-bottom:1.5rem;flex-wrap:wrap;}
+.vtab{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:24px;padding:8px 16px;cursor:pointer;transition:.15s;font-size:13px;color:var(--muted);}
+.vtab:hover{border-color:var(--border2);color:var(--text);}.vtab.on{border-color:var(--accent);color:var(--text);background:rgba(124,111,255,.1);}
+.av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;font-family:'Syne',sans-serif;}
+.vb{background:var(--bg3);padding:2px 8px;border-radius:10px;font-size:11px;color:var(--muted);}.vtab.on .vb{background:var(--accent);color:#fff;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:16px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:.2s;}
+.card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.3);}
+.ch{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.cid{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.1em;margin-bottom:4px;}
+.ceq{font-size:14px;font-weight:500;line-height:1.4;}
+.ccl{font-size:12px;color:var(--muted);margin-top:2px;}
+.sbadge{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap;flex-shrink:0;}
+.st-rep{background:var(--gbg);color:var(--green);}.st-agp{background:var(--ybg);color:var(--yellow);}
+.st-sem{background:var(--rbg);color:var(--red);}.st-ana{background:var(--bbg);color:var(--blue);}
+.st-com{background:var(--obg);color:var(--orange);}.st-env{background:var(--pbg);color:var(--purple);}
+.st-nd{background:rgba(139,144,168,.1);color:var(--muted);}
+.cb{padding:1.25rem 1.5rem;}
+.obs{margin-top:12px;background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--rs);padding:10px 14px;font-size:12px;color:var(--muted);line-height:1.6;}
+.obs b{color:var(--text);display:block;font-size:11px;margin-bottom:4px;letter-spacing:.05em;}
+.cf{padding:12px 1.5rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.vchip{display:flex;align-items:center;gap:8px;font-size:12px;}
+.vav{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;}
+.dbdg{font-size:11px;padding:3px 10px;border-radius:12px;background:var(--bg3);color:var(--muted);}
+.dbdg.warn{background:var(--rbg);color:var(--red);}.dbdg.ok{background:var(--gbg);color:var(--green);}
+.tl{display:flex;margin-top:10px;overflow:hidden;border-radius:var(--rs);}
+.tls{flex:1;padding:6px 8px;font-size:10px;text-align:center;}
+.tll{color:var(--muted);margin-bottom:2px;}.tld{font-weight:500;font-size:11px;}
+.done{background:var(--gbg);}.done .tld{color:var(--green);}
+.pend{background:var(--bg3);}.pend .tld{color:var(--muted);}
+.act{background:rgba(124,111,255,.15);}.act .tld{color:var(--accent2);}
+.alertbox{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.25);border-radius:var(--r);padding:1.25rem 1.5rem;margin-bottom:1.5rem;display:flex;gap:14px;align-items:flex-start;}
+.alt{font-size:13px;font-weight:600;color:var(--red);margin-bottom:4px;}
+.ali{font-size:12px;color:var(--muted);line-height:1.8;}.ali span{color:var(--text);}
+.empty{text-align:center;padding:4rem 2rem;color:var(--muted);}
+.ei{font-size:48px;margin-bottom:16px;opacity:.4;}
+.et{font-family:'Syne',sans-serif;font-size:18px;margin-bottom:8px;}
+.ri{font-size:12px;color:var(--muted);margin-bottom:1rem;}.ri strong{color:var(--text);}
+.erbox{background:var(--rbg);border:1px solid rgba(248,113,113,.25);border-radius:var(--r);padding:1.5rem;}
+.ert{font-size:15px;font-weight:600;color:var(--red);margin-bottom:8px;}
+.erd{font-size:13px;color:var(--muted);line-height:1.9;}
+.btn-r{margin-top:14px;padding:8px 20px;background:var(--accent);border:none;border-radius:8px;color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;}
+@media(max-width:700px){main{padding:1.5rem 1rem;}.grid{grid-template-columns:1fr;}.hdate{display:none;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="hi">
+    <div class="logo">
+      <div class="logo-ico">🔧</div>
+      <div><div class="logo-t">Lab Reparos</div><div class="logo-s">Acompanhamento · Araraquara</div></div>
+    </div>
+    <div class="hr">
+      <div class="hdate" id="hdate"></div>
+      <button class="sbtn" onclick="sync()">
+        <span class="dot" id="dot"></span>
+        <span class="sico" id="sico">↻</span>
+        <span id="slbl">Ao vivo</span>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="main">
+  <div class="loader"><div class="spinner"></div><div>Conectando à planilha…</div></div>
+</main>
+<script>
+const CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQL1tk93LePNaB53s4sqFnw0C6GysF_a-z9u9yZesnYiLj1yGQeb0Rlfmr1aWy9kA/pub?gid=1279686567&single=true&output=csv";
+const CORES=[{bg:"#7c6fff22",text:"#a78bfa"},{bg:"#f472b622",text:"#f472b6"},{bg:"#34d39922",text:"#34d399"},{bg:"#60a5fa22",text:"#60a5fa"},{bg:"#fb923c22",text:"#fb923c"},{bg:"#c084fc22",text:"#c084fc"},{bg:"#fbbf2422",text:"#fbbf24"}];
+const SM={
+  "Em reparo":    {cls:"st-rep",label:"Em Reparo",    icon:"🔧"},
+  "Ag. Aprovação":{cls:"st-agp",label:"Ag. Aprovação",icon:"⏳"},
+  "Sem aprovação":{cls:"st-sem",label:"Sem Aprovação",icon:"❌"},
+  "Em análise":   {cls:"st-ana",label:"Em Análise",   icon:"🔬"},
+  "Componentes":  {cls:"st-com",label:"Componentes",  icon:"📦"},
+  "Enviado":      {cls:"st-env",label:"Enviado",       icon:"🚚"},
+  "":             {cls:"st-nd", label:"Sem Status",    icon:"⚪"},
+};
+let dados=[],vc={},fV="TODAS",fS="TODOS",bsc="",lastAt=null;
+
+function splitCSV(l){
+  const a=[];let c="",q=false;
+  for(const x of l){if(x==='"'){q=!q;}else if(x===','&&!q){a.push(c.trim());c="";}else{c+=x;}}
+  a.push(c.trim());return a;
+}
+function fmtD(v){
+  v=(v||"").replace(/"/g,"").trim();
+  if(!v||v==="-")return"-";
+  const m=v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if(m)return`${String(m[2]).padStart(2,"0")}/${String(m[1]).padStart(2,"0")}/${m[3]}`;
+  return v;
+}
+function normS(s){
+  s=(s||"").replace(/"/g,"").trim();
+  if(!s)return"";const l=s.toLowerCase();
+  if(l.includes("bancada")||l.includes("em reparo")||l.includes("reparando"))return"Em reparo";
+  if(l.includes("ag")&&l.includes("aprova"))return"Ag. Aprovação";
+  if(l.includes("sem aprova"))return"Sem aprovação";
+  if(l.includes("anál")||l.includes("anal")||l.includes("declin")||l.includes("delcin"))return"Em análise";
+  if(l.includes("componente")||l.includes("karos"))return"Componentes";
+  if(l.includes("enviado")||l.includes("eletropam"))return"Enviado";
+  if(s.length>2)return s;return"";
+}
+function parseCSV(txt){
+  const linhas=txt.replace(/\r/g,"").split("\n");
+  const res=[];
+  for(const linha of linhas){
+    const c=splitCSV(linha.trim());
+    const id=(c[0]||"").replace(/"/g,"").trim();
+    if(!/^\d{3,5}$/.test(id))continue;
+    // col 8 = Situação, col 9 = Observação (conforme cabeçalho da planilha)
+    // Mas às vezes a situação está em branco e o texto vai pra col 8
+    const raw8=(c[8]||"").replace(/"/g,"").trim();
+    const raw9=(c[9]||"").replace(/"/g,"").trim();
+    const sit8=normS(raw8);
+    let situacao="",obs="";
+    if(sit8){
+      situacao=sit8; obs=raw9;
+    } else if(raw8&&!sit8){
+      // texto em col8 não é situação → é observação
+      const sit9=normS(raw9);
+      situacao=sit9; obs=raw8;
+    } else {
+      situacao=normS(raw9); obs="";
+    }
+    res.push({
+      id,
+      vendedora:(c[1]||"").replace(/"/g,"").trim().toUpperCase(),
+      cliente:  (c[2]||"").replace(/"/g,"").trim(),
+      equipamento:(c[3]||"").replace(/"/g,"").trim(),
+      entrada:  fmtD(c[4]),proposta:fmtD(c[5]),
+      componentes:(c[6]||"").replace(/"/g,"").trim()||"-",
+      entrega:  fmtD(c[7]),
+      situacao, obs,
+    });
+  }
+  return res;
+}
+function mkVC(vends){const m={};let i=0;vends.forEach(v=>{if(!m[v]){m[v]={...CORES[i%CORES.length],sigla:v.slice(0,2)};i++;}});return m;}
+function diasDe(d){if(!d||d==="-")return null;const p=d.split("/");if(p.length!==3)return null;const dt=new Date(p[2],p[1]-1,p[0]);return isNaN(dt)?null:Math.floor((new Date()-dt)/86400000);}
+function setSt(s){
+  const d=document.getElementById("dot"),i=document.getElementById("sico"),l=document.getElementById("slbl");
+  if(!d)return;
+  d.className="dot"+(s?` ${s}`:"");
+  i.className="sico"+(s==="load"?" spin":"");
+  l.textContent=s==="load"?"Carregando…":s==="err"?"Erro":"Ao vivo";
+}
+
+async function sync(){
+  setSt("load");
+  try{
+    const r=await fetch(CSV+"&t="+Date.now(),{cache:"no-store"});
+    if(!r.ok)throw new Error("HTTP "+r.status);
+    const txt=await r.text();
+    if(!txt||txt.toLowerCase().startsWith("<!"))throw new Error("Retornou HTML em vez de CSV");
+    const parsed=parseCSV(txt);
+    if(!parsed.length)throw new Error("Nenhuma linha com ID numérico encontrada");
+    dados=parsed;
+    vc=mkVC([...new Set(dados.map(d=>d.vendedora).filter(Boolean))]);
+    lastAt=new Date();
+    setSt("");
+    renderAll();
+  }catch(e){
+    console.error(e);
+    setSt("err");
+    if(!dados.length) showErr(e.message);
+    else{const el=document.getElementById("lupd");if(el)el.textContent="⚠️ Falha — exibindo dados anteriores";}
+  }
+}
+
+function showErr(msg){
+  document.getElementById("main").innerHTML=`
+  <div class="erbox"><div class="ert">⚠️ Não foi possível carregar a planilha</div>
+  <div class="erd">Verifique se a planilha está publicada:<br><br>
+  1. Google Sheets → <b>Arquivo → Compartilhar → Publicar na web</b><br>
+  2. Selecione a aba e formato <b>CSV</b> → Publicar<br><br>
+  <small style="opacity:.5">${msg}</small></div>
+  <button class="btn-r" onclick="sync()">↻ Tentar novamente</button></div>`;
+}
+
+function renderAll(){
+  document.getElementById("main").innerHTML=`
+    <div class="alertbox" id="alerta" style="display:none"></div>
+    <div class="sgrid" id="sg"></div>
+    <div class="lupd" id="lupd"></div>
+    <div class="fbar">
+      <div class="sw"><span class="si">🔍</span><input class="sinp" id="sinp" placeholder="Buscar cliente, equipamento, ID…"></div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span class="flbl">Status:</span><div id="sf"></div></div>
+    </div>
+    <div class="vtabs" id="vt"></div>
+    <div class="ri" id="ri"></div>
+    <div class="grid" id="grid"></div>`;
+  document.getElementById("sinp").addEventListener("input",e=>{bsc=e.target.value;rCards();});
+  rStats();rAlerta();rVtabs();rSF();rCards();
+  const el=document.getElementById("lupd");
+  if(el&&lastAt)el.textContent=`✓ Sincronizado às ${lastAt.toLocaleTimeString("pt-BR")} · atualiza automaticamente a cada 5 min`;
+}
+
+function rStats(){
+  const t=dados.length,er=dados.filter(d=>d.situacao==="Em reparo").length,
+    ag=dados.filter(d=>d.situacao==="Ag. Aprovação").length,
+    sa=dados.filter(d=>d.situacao==="Sem aprovação").length,
+    ea=dados.filter(d=>d.situacao==="Em análise").length,
+    co=dados.filter(d=>d.situacao==="Componentes").length;
+  document.getElementById("sg").innerHTML=`
+    <div class="sc s-tot"><div class="sl">Total</div><div class="sv">${t}</div><div class="sd">em acompanhamento</div></div>
+    <div class="sc s-rep"><div class="sl">Em Reparo</div><div class="sv">${er}</div><div class="sd">sendo trabalhados</div></div>
+    <div class="sc s-agp"><div class="sl">Ag. Aprovação</div><div class="sv">${ag}</div><div class="sd">aguardando cliente</div></div>
+    <div class="sc s-sem"><div class="sl">Sem Aprovação</div><div class="sv">${sa}</div><div class="sd">sem resposta</div></div>
+    <div class="sc s-ana"><div class="sl">Em Análise</div><div class="sv">${ea}</div><div class="sd">em diagnóstico</div></div>
+    <div class="sc s-com"><div class="sl">Componentes</div><div class="sv">${co}</div><div class="sd">aguardando peças</div></div>`;
+}
+function rAlerta(){
+  const u=dados.filter(d=>d.situacao==="Sem aprovação"&&d.obs&&d.obs.toLowerCase().includes("dias"));
+  const b=document.getElementById("alerta");if(!b)return;
+  if(!u.length){b.style.display="none";return;}
+  b.style.display="flex";
+  b.innerHTML=`<div style="font-size:20px;margin-top:2px">🚨</div><div><div class="alt">Reparos sem resposta — Ação necessária</div><div class="ali">${u.map(x=>`<span>#${x.id}</span> · ${x.cliente} · ${x.equipamento} — ${x.obs}`).join("<br>")}</div></div>`;
+}
+function rVtabs(){
+  const vends=["TODAS",...Object.keys(vc)];
+  document.getElementById("vt").innerHTML=vends.map(v=>{
+    const cnt=v==="TODAS"?dados.length:dados.filter(d=>d.vendedora===v).length;
+    const c=v!=="TODAS"?vc[v]:{bg:"#ffffff11",text:"var(--muted)",sigla:"★"};
+    return`<div class="vtab ${fV===v?"on":""}" onclick="setV('${v}')"><div class="av" style="background:${c.bg};color:${c.text}">${c.sigla}</div>${v==="TODAS"?"Todas":v[0]+v.slice(1).toLowerCase()}<span class="vb">${cnt}</span></div>`;
+  }).join("");
+}
+function rSF(){
+  const ss=["TODOS",...Object.keys(SM).filter(s=>s!=="")];
+  document.getElementById("sf").innerHTML=`<div style="display:flex;gap:6px;flex-wrap:wrap">`+
+    ss.map(s=>{const st=SM[s];return`<button class="fb ${fS===s?"on":""}" onclick="setS('${s}')">${s==="TODOS"?"Todos":`${st.icon} ${st.label}`}</button>`;}).join("")+`</div>`;
+}
+function rCards(){
+  const fil=dados.filter(d=>{
+    const mV=fV==="TODAS"||d.vendedora===fV;
+    const mS=fS==="TODOS"||d.situacao===fS;
+    const b=bsc.toLowerCase();
+    const mB=!b||d.id.includes(b)||d.cliente.toLowerCase().includes(b)||d.equipamento.toLowerCase().includes(b)||d.vendedora.toLowerCase().includes(b);
+    return mV&&mS&&mB;
+  });
+  document.getElementById("ri").innerHTML=`Exibindo <strong>${fil.length}</strong> de <strong>${dados.length}</strong> reparos`;
+  const g=document.getElementById("grid");
+  if(!fil.length){g.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="ei">🔍</div><div class="et">Nenhum reparo encontrado</div><p>Ajuste os filtros ou a busca.</p></div>`;return;}
+  g.innerHTML=fil.map(d=>{
+    const st=SM[d.situacao]||SM[""];
+    const c=vc[d.vendedora]||{bg:"#88888822",text:"#888",sigla:d.vendedora.slice(0,2)};
+    const dent=diasDe(d.entrada);
+    const tl=[{l:"Entrada",v:d.entrada},{l:"Proposta",v:d.proposta},{l:"Componentes",v:d.componentes},{l:"Entrega",v:d.entrega}];
+    const tlH=tl.map((s,i)=>{
+      const done=s.v&&s.v!=="-";
+      const act=!done&&tl.slice(0,i).every(x=>x.v&&x.v!=="-");
+      return`<div class="tls ${done?"done":act?"act":"pend"}"><div class="tll">${s.l}</div><div class="tld">${done?s.v:"—"}</div></div>`;
+    }).join("");
+    const db=dent!==null?`<span class="dbdg ${dent>60?"warn":"ok"}">${dent}d desde entrada</span>`:"";
+    const obsHtml=d.obs?`<div class="obs"><b>💬 Observação</b>${d.obs}</div>`:"";
+    return`<div class="card">
+      <div class="ch"><div><div class="cid">#${d.id}</div><div class="ceq">${d.equipamento}</div><div class="ccl">📍 ${d.cliente}</div></div><span class="sbadge ${st.cls}">${st.icon} ${st.label}</span></div>
+      <div class="cb"><div style="margin-bottom:10px"><div style="font-size:10px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em">Linha do Tempo</div><div class="tl">${tlH}</div></div>${obsHtml}</div>
+      <div class="cf"><div class="vchip"><div class="vav" style="background:${c.bg};color:${c.text}">${c.sigla}</div><span style="font-size:12px;color:var(--muted)">${d.vendedora}</span></div>${db}</div>
+    </div>`;
+  }).join("");
+}
+function setV(v){fV=v;rVtabs();rCards();}
+function setS(s){fS=s;rSF();rCards();}
+
+document.getElementById("hdate").textContent=new Date().toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"long",year:"numeric"});
+sync();
+setInterval(sync, 5*60*1000);
+</script>
+</body>
+</html>
